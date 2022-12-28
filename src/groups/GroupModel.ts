@@ -11,14 +11,14 @@ export default class GroupModel {
   }
 
   static fromJson(json: any): GroupModel {
-    return new GroupModel(json.id, json.name, json.memberIds);
+    return new GroupModel(json.id, json.name, json.members);
   }
 
   toJson() {
     return {
       id: this.id,
       name: this.name,
-      memberIds: this.members,
+      members: this.members,
     };
   }
 }

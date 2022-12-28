@@ -1,4 +1,5 @@
 import { View, Text, Pressable } from "react-native";
+import copyToClipboard from "../helpers/copyToClipboard";
 import GroupModel from "./GroupModel";
 
 const styles: any = {
@@ -29,7 +30,12 @@ export default ({ item }: { item: GroupModel }) => {
       <Text style={styles.text} numberOfLines={1}>
         Id : {item.id}
       </Text>
-      <Pressable style={styles.copyId}>
+      <Pressable
+        style={styles.copyId}
+        onPress={() => {
+          copyToClipboard(item.id);
+        }}
+      >
         <Text style={{ textAlign: "center", color: "white" }}>Copy Id</Text>
       </Pressable>
     </View>

@@ -4,7 +4,9 @@ app.use(express.json());
 const port = 3029;
 
 let storedUserGroupMap = {};
-let storedGroupLookup = {};
+let storedGroupLookup = {
+  test: { id: "test", name: "Test group", members: [] },
+};
 
 app.get("/user/:userId/groups", (req, res) => {
   const userGroups = storedUserGroupMap[req.params.userId];
@@ -17,9 +19,24 @@ app.get("/user/:userId/groups", (req, res) => {
   res.send(groupsToSend);
 });
 
-app.post("/user/:userId/groups", (req, res) => {
+app.post("/group/:groupId/add-user/:userId", (req, res) => {
+  const groupId = req.params.groupId;
   const userId = req.params.userId;
+
+  storedUserGroupMap[userId] = storedUserGroupMap[userId]
+    ? [...storedUserGroupMap[userId], groupId]
+    : [groupId];
+
+  storedGroupLookup[groupId]?.push(userId);
+
+  res.sendStatus(200);
+  console.log("Added user " + userId);
+});
+
+app.post("/group", (req, res) => {
   const group = req.body;
+  console.log(JSON.stringify(group));
+  const userId = group.members[0];
 
   storedUserGroupMap[userId] = storedUserGroupMap[userId]
     ? [...storedUserGroupMap[userId], group.id]
@@ -29,8 +46,6 @@ app.post("/user/:userId/groups", (req, res) => {
 
   res.sendStatus(200);
   console.log("Added group " + JSON.stringify(group));
-  console.log(JSON.stringify(storedUserGroupMap));
-  console.log(JSON.stringify(storedGroupLookup));
 });
 
 app.listen(port, () => {

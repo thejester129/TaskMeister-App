@@ -6,7 +6,7 @@ import {
   Pressable,
   TextInput,
 } from "react-native";
-import { createGroup } from "../requests";
+import { createGroup, joinGroup } from "../requests";
 import getUserId from "../storage/getUserId";
 import colours from "../styles/colours";
 import GroupHeaderSwitch from "./GroupHeaderSwitch";
@@ -53,7 +53,8 @@ const getStyles = (width: number, height: number): any => ({
 export default ({ onClose }: any) => {
   const { width, height } = useWindowDimensions();
   const [isJoin, setIsJoin] = useState(false);
-  const [groupName, setGroupName] = useState("");
+  const [groupName, setGroupName] = useState<string>("");
+  const [groupId, setGroupId] = useState("");
   const styles = getStyles(width, height);
   const Header = (
     <View style={styles.header}>
@@ -62,7 +63,11 @@ export default ({ onClose }: any) => {
   );
 
   const Name = isJoin ? (
-    <TextInput style={styles.textInput} placeholder="Group Id"></TextInput>
+    <TextInput
+      style={styles.textInput}
+      onChangeText={(text) => setGroupId(text)}
+      placeholder="Group Id"
+    ></TextInput>
   ) : (
     <TextInput
       style={styles.textInput}
@@ -92,6 +97,9 @@ export default ({ onClose }: any) => {
   );
 
   function onJoinGroup() {
+    if (groupId) {
+      getUserId().then((userId) => joinGroup(groupId, userId));
+    }
     onClose();
   }
 

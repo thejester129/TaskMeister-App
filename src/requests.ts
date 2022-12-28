@@ -16,12 +16,18 @@ export async function fetchUserGroups(userId: string): Promise<GroupModel[]> {
 
 export async function createGroup(group: GroupModel, userId: string) {
   group.members.push(userId);
-  fetch(BASE_URI + `/user/${userId}/groups`, {
+  fetch(BASE_URI + `/group`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(group.toJson()),
+  });
+}
+
+export async function joinGroup(groupId: string, userId: string) {
+  fetch(BASE_URI + `/group/${groupId}/add-user/${userId}`, {
+    method: "POST",
   });
 }

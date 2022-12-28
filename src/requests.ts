@@ -1,11 +1,25 @@
 import { BASE_URI } from "../env";
 import GroupModel from "./groups/GroupModel";
+import WeeklyTaskModel from "./weekly_task_list/WeeklyTaskModel";
 
 export async function fetchUserGroups(userId: string): Promise<GroupModel[]> {
   let result;
-  console.log(userId);
   try {
     result = await fetch(BASE_URI + `/user/${userId}/groups`);
+  } catch (e) {
+    console.log(e);
+  }
+  const json = await result?.json();
+  console.log(json);
+  return json ?? [];
+}
+
+export async function fetchWeeklyTasks(
+  userId: string
+): Promise<WeeklyTaskModel[]> {
+  let result;
+  try {
+    result = await fetch(BASE_URI + `/user/${userId}/weekly-tasks`);
   } catch (e) {
     console.log(e);
   }
@@ -27,7 +41,19 @@ export async function createGroup(group: GroupModel, userId: string) {
 }
 
 export async function joinGroup(groupId: string, userId: string) {
-  fetch(BASE_URI + `/group/${groupId}/add-user/${userId}`, {
+  fetch(BASE_URI + `/group/${groupId}/user/${userId}`, {
     method: "POST",
+  });
+}
+
+export async function completeTask(taskId: string, userId: string) {
+  fetch(BASE_URI + `/user/${userId}/weekly-tasks/${taskId}`, {
+    method: "POST",
+  });
+}
+
+export async function uncompleteTask(taskId: string, userId: string) {
+  fetch(BASE_URI + `/user/${userId}/weekly-tasks/${taskId}`, {
+    method: "DELETE",
   });
 }

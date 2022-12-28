@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colours from "./styles/colours";
-import TaskList from "./task_list/TaskList";
+import TaskList from "./weekly_task_list/WeeklyTaskList";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import GroupList from "./groups/GroupList";
 
